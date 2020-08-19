@@ -1,6 +1,7 @@
 import React from "react";
 
-import allRooms, { roomTypes, capacity as roomCapacity } from "../data";
+// import allRooms, { roomTypes, capacity as roomCapacity } from "../data";
+import Client from "../contentful";
 
 const RoomContext = React.createContext();
 
@@ -20,23 +21,43 @@ class RoomProvider extends React.Component {
     maxSize: 0,
     breakfast: false,
     pets: false,
+    roomCapacity: [],
+    roomCapacitys: [],
+  };
+
+  getData = async () => {
+    try {
+      const response = await Client.getEntries({
+        content_type: "rooms",
+        order: "fields.price",
+      });
+
+      const rooms = this.formatData(response.items);
+      const featuredRooms = rooms.filter((room) => room.featured);
+      const maxPrice = Math.max(...rooms.map((room) => room.price));
+      const maxSize = Math.max(...rooms.map((room) => room.size));
+
+      const roomTypes = [...new Set(rooms.map((room) => room.type))];
+      const roomCapacitys = [...new Set(rooms.map((room) => room.capacity))];
+
+      this.setState({
+        rooms,
+        featuredRooms,
+        sortedRooms: rooms,
+        isLoading: false,
+        price: maxPrice,
+        maxPrice,
+        maxSize,
+        roomTypes,
+        roomCapacitys,
+      });
+    } catch (e) {
+      console.log("fetch data error. ", e);
+    }
   };
 
   componentDidMount() {
-    const rooms = this.formatData(allRooms);
-    const featuredRooms = rooms.filter((room) => room.featured);
-    const maxPrice = Math.max(...rooms.map((room) => room.price));
-    const maxSize = Math.max(...rooms.map((room) => room.size));
-
-    this.setState({
-      rooms,
-      featuredRooms,
-      sortedRooms: rooms,
-      isLoading: false,
-      price: maxPrice,
-      maxPrice,
-      maxSize,
-    });
+    this.getData();
   }
 
   formatData(allRooms) {
@@ -91,8 +112,6 @@ class RoomProvider extends React.Component {
           ...this.state,
           getRoomDetail: this.getRoomDetail,
           handleFilterChange: this.handleFilterChange,
-          roomTypes,
-          roomCapacity,
         }}>
         {this.props.children}
       </RoomContext.Provider>

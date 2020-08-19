@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-import defaultImage from "../images/room-1.jpeg";
+import defaultImage from "../images/defaultBcg.jpeg";
 import { Link } from "react-router-dom";
 
 const Room = ({ room: { price, images, slug, name } }) => {

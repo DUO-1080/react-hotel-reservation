@@ -11,12 +11,11 @@ const RoomsFilter = () => {
     price,
     minSize,
     maxSize,
-    rooms,
     type,
     capacity,
     roomTypes,
     handleFilterChange,
-    roomCapacity,
+    roomCapacitys,
     breakfast,
     pets,
   } = useContext(RoomContext);
@@ -43,7 +42,7 @@ const RoomsFilter = () => {
             id="capacity"
             value={capacity}
             onChange={handleFilterChange}>
-            {[...roomCapacity].map((capacity) => (
+            {[...roomCapacitys].map((capacity) => (
               <option key={capacity} value={capacity}>
                 {capacity}
               </option>

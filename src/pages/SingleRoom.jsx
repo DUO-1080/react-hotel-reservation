@@ -30,26 +30,13 @@ class SingleRoom extends React.Component {
       );
     }
 
-    const {
-      name,
-      slug,
-      type,
-      price,
-      size,
-      capacity,
-      pets,
-      breakfast,
-      featured,
-      description,
-      extras,
-      images,
-    } = room;
+    const { name, price, size, capacity, pets, breakfast, description, extras, images } = room;
 
     const [mainImage, ...restImage] = images;
 
     return (
       <>
-        <HeroStyled image={images[0]}>
+        <HeroStyled image={mainImage}>
           <Banner title={`${name} room`}>
             <Link to="/rooms" className="btn-primary">
               back to rooms
@@ -69,7 +56,7 @@ class SingleRoom extends React.Component {
             </article>
             <article className="info">
               <h3>info</h3>
-              <p>price: ${price}</p>
+              <h6>price: ${price}</h6>
               <h6>size: {size}</h6>
               <h6> max capacity: {capacity > 1 ? `${capacity} people` : `${capacity} person`} </h6>
               <h6> {pets ? "pets allowed" : "np pets allowed"} </h6>
